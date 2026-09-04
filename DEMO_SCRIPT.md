@@ -1,10 +1,10 @@
 # Demo video script — target 2:30
 
-Record the real public site at 1280×720 or larger. Use audible narration, no music, and keep the final upload public on YouTube. Reset immediately before recording.
+Record the real public site at 1280×720 or larger. Use audible narration, no music, and keep the final upload public on YouTube. For the cleanest fixed-number path, start in a fresh browser profile or cleared site storage so the seeded state opens at revision 1. If reusing a profile, reset from its current revision and treat every revision below as relative rather than fixed.
 
 ## 0:00–0:18 — the problem
 
-**Visual:** Open Aftershade at revision 1. Briefly point to the resident brief, protected Market/Garden chips, hot route, and empty plan.
+**Visual:** Open Aftershade in the seeded state (revision 1 in a fresh profile). Briefly point to the resident brief, protected Market/Garden chips, hot route, and empty plan.
 
 **Narration:** “Cities can optimize heat maps, but residents know what those maps cannot: where deliveries must happen, where older neighbors rest, and what a redesign must not erase. Aftershade puts that lived judgment and an agent's search ability on the same street.”
 
@@ -24,9 +24,9 @@ Record the real public site at 1280×720 or larger. Use audible narration, no mu
 
 ## 1:12–1:48 — human interruption
 
-**Action:** Select Library plaza and click **Protect** while the agent still holds revision 7. Then invoke any write with `expectedRevision: 7`.
+**Action:** Note the current revision, then select Library plaza and click **Protect** while the agent still holds that prior revision. Invoke any write using the now-stale revision.
 
-**Visual:** Revision becomes 8; the plan shows one tension; the stale write error says to re-inspect.
+**Visual:** The revision advances by one; the plan shows one tension; the stale write error reports the prior and current revisions and says to re-inspect.
 
 **Narration:** “Now I add what only a resident may know: the library plaza is a protected resting place. The existing tree corridor conflicts. More importantly, the old agent write is rejected. It cannot silently overwrite my decision.”
 
@@ -34,7 +34,7 @@ Record the real public site at 1280×720 or larger. Use audible narration, no mu
 
 **Action:** Have the agent inspect again, remove the tree corridor at Library, add a shade canopy, simulate, and mark ready for resident review.
 
-**Visual:** End on revision 12, `$254k`, `15%` exposed route, score `78`, three protected chips, and the mixed human/agent activity trail.
+**Visual:** End on `$254k`, `15%` exposed route, score `78`, three protected chips, and the mixed human/agent activity trail. A fresh revision-1 path ends at revision 12.
 
 **Narration:** “After re-inspecting, the agent understands the new constraint, replaces the disruptive move, simulates again, and marks the branch ready. The person keeps authority; the agent keeps momentum; the page preserves authorship and evidence.”
 
@@ -46,8 +46,9 @@ Record the real public site at 1280×720 or larger. Use audible narration, no mu
 
 ## Reset and recording checklist
 
-- Call `reset_aftershade_demo` with `{ "confirm": true }`.
-- Confirm revision 1, one branch, zero interventions, and two protected places.
+- Prefer a fresh browser profile or cleared site storage for the fixed revision-1 path.
+- If reusing a profile, inspect the current revision, then call `reset_aftershade_demo` with `{ "expectedRevision": CURRENT_REVISION, "confirm": true }`; reset advances to a new monotonic revision.
+- Confirm one branch, zero interventions, and two protected places before recording.
 - Close notifications, hide bookmarks, and use a clean browser profile.
 - Record one continuous product path; do not depict calls that were not executed.
 - Confirm exported duration is under 3:00 and narration is audible.
