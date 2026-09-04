@@ -1,6 +1,6 @@
 # WebMCP Challenge — verified requirements
 
-Last verified: 2026-09-04 10:12 JST
+Last verified: 2026-09-04 15:41 JST
 
 Authoritative sources:
 
@@ -15,8 +15,8 @@ Authoritative sources:
 ## Deadline and freeze policy
 
 - [x] Current submission deadline verified: **2026-09-04 01:00 PDT / 17:00 JST** (12-hour extension).
-- [x] Current time checked: **2026-09-04 10:11 JST**; 6h49m remained.
-- [ ] Development freeze by 15:30 JST.
+- [x] Current time checked: **2026-09-04 15:41 JST**; 1h19m remained.
+- [x] Development freeze by 15:30 JST; only release evidence and link updates followed.
 - [ ] All links and submission draft frozen by 16:30 JST.
 - [ ] Do not modify the submitted Devpost entry, repository, or live site after the deadline until judging ends on 2026-09-21 17:00 PT.
 
@@ -31,15 +31,15 @@ Authoritative sources:
 
 ## Required product
 
-- [x] Working WebMCP-powered web application (local contract and real-browser flow verified).
+- [x] Working WebMCP-powered web application (local contract plus public production real-browser flow verified).
 - [x] Complete and coherent product experience, not only a proof of concept.
 - [x] WebMCP implementation is non-trivial and materially improves the experience.
-- [x] Local functionality runs consistently with the prepared video script; production re-check remains gated on deployment.
+- [x] Local and production functionality run consistently with the prepared video script.
 
 ## Required live access
 
-- [ ] Public working URL over HTTPS.
-- [ ] Accessible in ChatGPT's in-app browser.
+- [x] Public working URL over HTTPS.
+- [x] Accessible in ChatGPT's in-app browser; all 11 tools discovered and invoked on production.
 - [ ] Accessible in Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled.
 - [ ] Free and unrestricted for judges through 2026-09-21 17:00 PT.
 - [x] Authentication omitted; no judge credentials needed.
@@ -54,10 +54,10 @@ Authoritative sources:
 
 ## Required public repository
 
-- [ ] Public GitHub, GitLab, or Bitbucket URL.
+- [x] Public GitHub repository: https://github.com/yukifoo/aftershade-webmcp
 - [x] All source, assets, and instructions needed to run the project are prepared locally.
 - [x] `document.modelContext.registerTool(...)` source is plainly visible.
-- [x] Open-source `LICENSE` is present locally; hosting detection awaits public repository creation.
+- [x] Open-source MIT `LICENSE` is included in the public repository.
 - [x] README explains setup, build, architecture, tools, demo, testing, and license.
 - [x] No secrets, private data, debug junk, or generated deployment credentials are stored in source.
 

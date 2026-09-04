@@ -38,7 +38,7 @@ The frontend uses React 19, TypeScript, Tailwind CSS, shadcn primitives, lucide 
 
 At the top-level page, a lifecycle hook feature-detects `document.modelContext.registerTool`, registers 11 imperative tools with narrow JSON Schemas and read/write annotations, and unregisters them through an `AbortSignal`. Tool handlers reuse the exact store mutations used by the human UI. Runtime validation protects environments that do not enforce every schema keyword.
 
-The automated contract suite exercises the real tool module against a model-context double. We also executed the core flow through a real browser's discovered WebMCP capability and verified the resulting DOM-visible revisions, metrics, constraint conflict, stale-write rejection, and recovery.
+The automated contract suite exercises the real tool module against a model-context double. We also executed the core flow through a real browser's discovered WebMCP capability on the public production origin and verified the resulting DOM-visible revisions, metrics, constraint conflict, stale-write rejection, recovery, and valid ready state.
 
 ## What we learned
 
@@ -53,7 +53,7 @@ The demo deliberately uses deterministic data so its behavior is transparent. A 
 ## Required links
 
 - Live app: https://aftershade-webmcp.yukifoo.chatgpt.site
-- Source repository: [ADD PUBLIC REPOSITORY URL]
+- Source repository: https://github.com/yukifoo/aftershade-webmcp
 - Demo video: [ADD PUBLIC YOUTUBE URL]
 
 ## Technology tags

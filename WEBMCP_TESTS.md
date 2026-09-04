@@ -1,6 +1,6 @@
 # WebMCP verification
 
-Last local verification: 2026-09-04 JST.
+Last local and production verification: 2026-09-04 JST.
 
 ## Automated contract suite
 
@@ -54,4 +54,18 @@ The following path was executed through the browser's discovered WebMCP capabili
 
 ## Production gate
 
-Repeat the real-browser smoke at the production HTTPS URL after deployment. A passing local build alone is not treated as production WebMCP evidence.
+Passed on the public HTTPS production origin:
+
+`https://aftershade-webmcp.yukifoo.chatgpt.site`
+
+The production browser discovered all 11 tools from that origin. Starting from an existing browser-local revision 9, the verified run was:
+
+1. Reset with `expectedRevision: 9` to a monotonic revision 10.
+2. Create and simulate `Shade First`: `$258k`, `20%` exposed route, score 77, no violations.
+3. Create and simulate `Canopy Network`: `$282k`, `18%` exposed route, score 82, no violations.
+4. Use the rendered human UI to protect Library plaza, advancing revision 16 to 17 and surfacing the tree-corridor conflict.
+5. Attempt a stale WebMCP write with `expectedRevision: 16`; receive `STALE_REVISION: expected 16, current 17`, then confirm no mutation occurred.
+6. Re-inspect revision 17, remove the conflicting tree corridor, add a shade canopy, simulate, and mark the plan ready.
+7. Confirm the DOM-visible final state at revision 21: protected Market/Garden/Library, `$254k`, `15%` exposed route, 25% canopy, score 78, committed status, and no violations.
+
+This production result is separate from the local contract and browser evidence above.

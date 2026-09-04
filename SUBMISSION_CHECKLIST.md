@@ -14,9 +14,9 @@ Live status, maintained during the build.
 - [x] Agent can inspect, mutate, simulate, compare, and recover from stale state.
 - [x] Human can interrupt and agent can adapt to the new revision.
 - [x] Demo reset restores the exact initial state.
-- [ ] Production deployment succeeds over HTTPS.
-- [ ] WebMCP discovery and invocation pass on production.
-- [ ] Public source repository exists.
+- [x] Production deployment succeeds over HTTPS.
+- [x] WebMCP discovery and invocation pass on production.
+- [x] Public source repository exists.
 - [ ] MIT license is detected.
 
 ## SHOULD SHIP — submission assets

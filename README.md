@@ -5,6 +5,7 @@
 Aftershade lets residents protect the places and routines a neighborhood cannot lose while a browser agent explores, simulates, and compares street-cooling plans on the exact same map. It was built for the 2026 WebMCP Challenge.
 
 - Live app: https://aftershade-webmcp.yukifoo.chatgpt.site
+- Source: https://github.com/yukifoo/aftershade-webmcp
 - Judge prompt: _Inspect this neighborhood. Create two plans under $350k that cut exposed route below 35% while protecting the market and garden. Simulate and compare them; do not commit._
 - Status: deterministic demo; no account, API key, external data, or paid service required
 
@@ -79,7 +80,7 @@ WebMCP tools ───┘             │
 - `scripts/check-webmcp-contract.mjs` — executable mock-browser contract suite
 - `SECURITY_REVIEW.md` — lightweight pre-submission threat review and remediation record
 
-No fake model call is shown. The neighborhood and simulation are intentionally deterministic demo data so every judge sees the same auditable result.
+No fake model call is shown. The neighborhood and simulation are intentionally deterministic demo data so every judge sees the same auditable result. The complete conflict-and-recovery path has been verified through WebMCP on the public production origin; see [`WEBMCP_TESTS.md`](WEBMCP_TESTS.md).
 
 ## Browser setup
 
