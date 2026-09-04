@@ -4,7 +4,7 @@
 
 Aftershade lets residents protect the places and routines a neighborhood cannot lose while a browser agent explores, simulates, and compares street-cooling plans on the exact same map. It was built for the 2026 WebMCP Challenge.
 
-- Live app: https://aftershade-webmcp.fresh-scout-8292.chatgpt.site
+- Live app: https://aftershade-webmcp.yukifoo.chatgpt.site
 - Judge prompt: _Inspect this neighborhood. Create two plans under $350k that cut exposed route below 35% while protecting the market and garden. Simulate and compare them; do not commit._
 - Status: deterministic demo; no account, API key, external data, or paid service required
 
@@ -59,7 +59,7 @@ npm run build
 | `show_heat_plan` | Brings a branch into the shared visible map. |
 | `mark_heat_plan_ready` | Marks a constraint-valid plan ready for resident review. |
 | `undo_heat_change` | Restores the prior shared state as a new revision. |
-| `reset_aftershade_demo` | Restores the exact seeded demo after explicit confirmation. |
+| `reset_aftershade_demo` | Restores the seeded demo after explicit confirmation and a current revision check; the reset remains undoable. |
 
 Tool registration lives in [`lib/webmcp.ts`](lib/webmcp.ts); lifecycle registration and `AbortSignal` cleanup live in [`hooks/use-webmcp.ts`](hooks/use-webmcp.ts).
 
@@ -77,6 +77,7 @@ WebMCP tools ───┘             │
 - `lib/store.ts` — revisioned mutations, persistence, branches, undo, and activity authorship
 - `lib/webmcp.ts` — imperative schemas, validation, annotations, and semantic tool handlers
 - `scripts/check-webmcp-contract.mjs` — executable mock-browser contract suite
+- `SECURITY_REVIEW.md` — lightweight pre-submission threat review and remediation record
 
 No fake model call is shown. The neighborhood and simulation are intentionally deterministic demo data so every judge sees the same auditable result.
 
@@ -86,7 +87,7 @@ No fake model call is shown. The neighborhood and simulation are intentionally d
 - Chrome: use Chrome 149 or newer and enable `chrome://flags/#enable-webmcp-testing` if required by that build.
 - Ordinary browsers: all human controls still work; WebMCP registration is progressively enhanced.
 
-See [`WEBMCP_TESTS.md`](WEBMCP_TESTS.md) for the verified workflow and [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) for the recording path.
+See [`WEBMCP_TESTS.md`](WEBMCP_TESTS.md) for the verified workflow, [`SECURITY_REVIEW.md`](SECURITY_REVIEW.md) for the release review, and [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) for the recording path.
 
 ## License
 

@@ -66,6 +66,22 @@ try {
   }
   if (!invalidConstraintFailed) throw new Error('non-integer constraint was not rejected');
 
+  let noChangeFailed = false;
+  try {
+    await setConstraints.execute({ expectedRevision: 1 });
+  } catch (error) {
+    noChangeFailed = String(error).includes('NO_CHANGES');
+  }
+  if (!noChangeFailed) throw new Error('empty constraint update was not rejected');
+
+  let unknownPropertyFailed = false;
+  try {
+    await apply.execute({ expectedRevision: 1, additions: [{ type: 'water_station', siteId: 'library', surprise: true }] });
+  } catch (error) {
+    unknownPropertyFailed = String(error).includes('unexpected property');
+  }
+  if (!unknownPropertyFailed) throw new Error('unknown nested property was not rejected');
+
   let invalidReadyFailed = false;
   try {
     await ready.execute({ expectedRevision: 1 });
@@ -124,16 +140,47 @@ try {
   const comparison = await compare.execute({});
   if (comparison.plans.length !== 2 || comparison.revision !== 9 || comparison.plans[1].status !== 'committed') throw new Error('comparison failed');
 
-  const undone = await undo.execute({ expectedRevision: 9 });
-  if (undone.revision !== 10) throw new Error('undo did not advance revision');
+  const invalidated = await setConstraints.execute({ expectedRevision: 9, budget: 100 });
+  if (invalidated.revision !== 10 || invalidated.metrics.violations.length === 0) throw new Error('new constraint did not invalidate ready plan');
+  if ((await inspect.execute({})).activePlan.status !== 'simulated') throw new Error('invalid ready status was preserved');
 
-  const resetResult = await reset.execute({ confirm: true });
-  if (resetResult.revision !== 1 || resetResult.activePlanId !== 'resident-brief') throw new Error('demo reset failed');
+  const undone = await undo.execute({ expectedRevision: 10 });
+  if (undone.revision !== 11) throw new Error('undo did not advance revision');
+
+  let staleResetFailed = false;
+  try {
+    await reset.execute({ expectedRevision: 10, confirm: true });
+  } catch (error) {
+    staleResetFailed = String(error).includes('STALE_REVISION');
+  }
+  if (!staleResetFailed || (await inspect.execute({})).revision !== 11) throw new Error('stale reset was not rejected');
+
+  const resetResult = await reset.execute({ expectedRevision: 11, confirm: true });
+  if (resetResult.revision !== 12 || resetResult.activePlanId !== 'resident-brief') throw new Error('demo reset failed');
+  const resetUndone = await undo.execute({ expectedRevision: 12 });
+  if (resetUndone.revision !== 13 || resetUndone.activePlanId !== 'cool-walk') throw new Error('demo reset was not recoverable');
+  const cleanReset = await reset.execute({ expectedRevision: 13, confirm: true });
+
+  let branchRevision = cleanReset.revision;
+  for (let index = 0; index < 7; index += 1) {
+    const branch = await create.execute({ expectedRevision: branchRevision, name: `Bounded ${index + 1}` });
+    branchRevision = branch.revision;
+  }
+  let branchLimitFailed = false;
+  try {
+    await create.execute({ expectedRevision: branchRevision, name: 'One too many' });
+  } catch (error) {
+    branchLimitFailed = String(error).includes('PLAN_LIMIT_REACHED');
+  }
+  const bounded = await inspect.execute({});
+  if (!branchLimitFailed || bounded.revision !== branchRevision || bounded.branches.length !== 8) throw new Error('plan branch limit was not enforced atomically');
+  await undo.execute({ expectedRevision: branchRevision });
+  if ((await inspect.execute({})).branches.length !== 7) throw new Error('failed branch creation polluted undo history');
 
   controller.abort();
   if (registered.size !== 0) throw new Error('AbortSignal did not unregister tools');
 
-  console.log('WebMCP contract: 11 tools; registration, runtime validation, atomic mutation, protection conflict, stale-write rejection, adaptation, readiness gate, undo, reset, and cleanup passed.');
+  console.log('WebMCP contract: 11 tools; registration, runtime validation, atomic mutation, protection conflict, stale-write/reset rejection, adaptation, readiness gate, recoverable reset, bounded branches, undo, and cleanup passed.');
 } finally {
   await rm(temp, { recursive: true, force: true });
 }

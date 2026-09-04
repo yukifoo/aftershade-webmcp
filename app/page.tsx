@@ -64,7 +64,7 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <div className="revision-pill" title="Every human or agent edit advances the shared revision.">
               <span className="h-1.5 w-1.5 rounded-full bg-[#7af0cf] shadow-[0_0_10px_#7af0cf]" />
-              Shared state · r{state.revision}
+              <span className="hidden sm:inline">Shared state · </span>r{state.revision}
             </div>
             <Button size="sm" variant="ghost" onClick={() => safeAction(() => aftershadeStore.undo())} className="hidden text-[#bad0d4] hover:bg-white/10 hover:text-white sm:inline-flex">
               <Undo2 className="h-4 w-4" /> Undo
@@ -127,7 +127,7 @@ export default function Home() {
           </section>
         </aside>
 
-        <section className="panel relative min-h-[680px] overflow-hidden lg:min-h-0">
+        <section className="panel relative min-h-[770px] overflow-hidden sm:min-h-[680px] lg:min-h-0">
           <div className="absolute inset-x-0 top-0 z-20 flex flex-wrap items-center justify-between gap-3 border-b border-white/8 bg-[#0b1b21]/92 px-4 py-3 backdrop-blur-md">
             <div>
               <div className="eyebrow"><MapPin className="h-3 w-3" /> Alder &amp; 8th · 15:00 heat peak</div>
@@ -139,7 +139,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="map-surface absolute inset-x-0 bottom-[178px] top-[73px]">
+          <div className="map-surface absolute inset-x-0 bottom-[250px] top-[73px] sm:bottom-[178px]">
             <div className="heat-legend" aria-label="Heat intensity legend"><span>Surface heat</span><i /><span>39°</span><b /><span>44°</span></div>
             <div className="street-label street-a">ALDER STREET</div>
             <div className="street-label street-b">8TH AVENUE</div>
@@ -159,7 +159,7 @@ export default function Home() {
             <div className="north-mark" aria-hidden="true"><span>N</span><Wind className="h-4 w-4" /></div>
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 z-20 h-[178px] border-t border-white/8 bg-[#09181e]/97 p-4">
+          <div className="absolute inset-x-0 bottom-0 z-20 h-[250px] border-t border-white/8 bg-[#09181e]/97 p-4 sm:h-[178px]">
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0">
                 <div className="flex items-center gap-2">

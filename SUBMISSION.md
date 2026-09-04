@@ -52,7 +52,7 @@ The demo deliberately uses deterministic data so its behavior is transparent. A 
 
 ## Required links
 
-- Live app: https://aftershade-webmcp.fresh-scout-8292.chatgpt.site
+- Live app: https://aftershade-webmcp.yukifoo.chatgpt.site
 - Source repository: [ADD PUBLIC REPOSITORY URL]
 - Demo video: [ADD PUBLIC YOUTUBE URL]
 

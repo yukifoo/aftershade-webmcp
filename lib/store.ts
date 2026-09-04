@@ -4,14 +4,19 @@ import { useEffect, useSyncExternalStore } from 'react';
 import { AppState, Actor, calculateMetrics, cloneState, Constraints, Intervention, InterventionType, makePlan, Plan, SEED_STATE, SiteId } from './domain';
 
 const STORAGE_KEY = 'aftershade-state-v1';
+export const MAX_PLANS = 8;
 let state = cloneState(SEED_STATE);
 let hydrated = false;
-let undoStack: AppState[] = [];
+const undoStack: AppState[] = [];
 const listeners = new Set<() => void>();
 
 function emit() {
   if (typeof window !== 'undefined') {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {
+      // The bounded in-memory demo remains usable when browser storage is unavailable.
+    }
     window.dispatchEvent(new CustomEvent('aftershade:change', { detail: { revision: state.revision } }));
   }
   listeners.forEach((listener) => listener());
@@ -50,7 +55,8 @@ function activePlan(draft: AppState) {
 
 function refreshPlan(plan: Plan, constraints: Constraints) {
   plan.metrics = calculateMetrics(plan.interventions, constraints);
-  if (plan.status !== 'committed') plan.status = 'simulated';
+  if (plan.status === 'committed' && plan.metrics.violations.length > 0) plan.status = 'simulated';
+  else if (plan.status !== 'committed') plan.status = plan.interventions.length > 0 ? 'simulated' : 'draft';
 }
 
 export const aftershadeStore = {
@@ -68,9 +74,11 @@ export const aftershadeStore = {
   selectSite: (siteId: SiteId) => { state = { ...state, selectedSiteId: siteId }; emit(); },
   selectPlan: (planId: string, actor: Actor = 'human', expectedRevision?: number) => commit(actor, 'Plan brought into view', state.plans.find((plan) => plan.id === planId)?.name ?? planId, (draft) => {
     if (!draft.plans.some((plan) => plan.id === planId)) throw new Error(`PLAN_NOT_FOUND: ${planId}`);
+    if (draft.activePlanId === planId) throw new Error(`PLAN_ALREADY_VISIBLE: ${planId}`);
     draft.activePlanId = planId;
   }, expectedRevision),
   createBranch: (name: string, actor: Actor = 'human', fromPlanId = state.activePlanId, expectedRevision?: number) => commit(actor, 'Plan branch created', `${name} from ${fromPlanId}`, (draft) => {
+    if (draft.plans.length >= MAX_PLANS) throw new Error(`PLAN_LIMIT_REACHED: Aftershade supports at most ${MAX_PLANS} plan branches per scenario.`);
     const source = draft.plans.find((plan) => plan.id === fromPlanId);
     if (!source) throw new Error(`PLAN_NOT_FOUND: ${fromPlanId}`);
     const baseId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'plan';
@@ -137,7 +145,18 @@ export const aftershadeStore = {
     emit();
     return cloneState(state);
   },
-  reset: () => { undoStack = []; state = cloneState(SEED_STATE); emit(); return cloneState(state); },
+  reset: (actor: Actor = 'human', expectedRevision?: number) => {
+    assertRevision(expectedRevision);
+    const previous = cloneState(state);
+    const restored = cloneState(SEED_STATE);
+    restored.revision = state.revision + 1;
+    restored.activity.unshift({ id: `${restored.revision}-${Date.now()}`, actor, label: 'Demo reset', detail: 'Restored the seeded neighborhood as a new shared revision.', revision: restored.revision, at: nowLabel() });
+    undoStack.push(previous);
+    if (undoStack.length > 30) undoStack.shift();
+    state = restored;
+    emit();
+    return cloneState(state);
+  },
 };
 
 export function useAftershadeState() {

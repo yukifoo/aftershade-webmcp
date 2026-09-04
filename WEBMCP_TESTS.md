@@ -18,13 +18,14 @@ The suite bundles the real TypeScript tool module and registers it against a sma
 - rejection of invalid typed input without a revision change;
 - stale-revision rejection without partial mutation;
 - undo advancing to a new revision;
-- exact demo reset;
+- stale-reset rejection plus a monotonic, recoverable reset;
+- an eight-plan aggregate branch limit with atomic rejection;
 - `AbortSignal` cleanup removing all registered tools.
 
 Expected final line:
 
 ```text
-WebMCP contract: 11 tools; registration, runtime validation, atomic mutation, protection conflict, stale-write rejection, adaptation, readiness gate, undo, reset, and cleanup passed.
+WebMCP contract: 11 tools; registration, runtime validation, atomic mutation, protection conflict, stale-write/reset rejection, adaptation, readiness gate, recoverable reset, bounded branches, undo, and cleanup passed.
 ```
 
 ## Real browser smoke
@@ -48,7 +49,8 @@ The following path was executed through the browser's discovered WebMCP capabili
 - Unknown plan, place, intervention type, and intervention ID values are rejected.
 - Budget and exposure values must be bounded integers.
 - Duplicate protected-place IDs are rejected.
-- `reset_aftershade_demo` requires `{ "confirm": true }`.
+- `reset_aftershade_demo` requires the current `expectedRevision` and `{ "confirm": true }`.
+- A scenario accepts at most eight total plan branches; the ninth is rejected without mutation.
 
 ## Production gate
 
