@@ -17,7 +17,7 @@ Live status, maintained during the build.
 - [x] Production deployment succeeds over HTTPS.
 - [x] WebMCP discovery and invocation pass on production.
 - [x] Public source repository exists.
-- [ ] MIT license is detected.
+- [x] GitHub detects the MIT license.
 
 ## SHOULD SHIP — submission assets
 
