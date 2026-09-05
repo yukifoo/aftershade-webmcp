@@ -3,6 +3,9 @@ import assert from 'node:assert/strict';
 // Run against the production build, locally or after deployment. Requests only
 // read the page/assets; they never call the state-changing WebMCP tools.
 const origin = new URL(process.argv[2] ?? 'http://localhost:4173');
+// Sites currently serves assets outside the Worker and does not apply _headers.
+// Keep the full asset check as the default for compatible Cloudflare hosts.
+const documentOnly = process.argv.includes('--document-only');
 const nonces = new Set();
 for (let attempt = 0; attempt < 2; attempt += 1) {
   const response = await fetch(origin, {
@@ -35,6 +38,7 @@ for (let attempt = 0; attempt < 2; attempt += 1) {
   const asset = await fetch(new URL(modulePath, origin));
   assert.equal(asset.status, 200);
   assert.match(asset.headers.get('content-type') ?? '', /javascript/);
-  assert.equal(asset.headers.get('x-content-type-options'), 'nosniff');
+  if (!documentOnly) assert.equal(asset.headers.get('x-content-type-options'), 'nosniff');
 }
 console.log('Security headers: fresh nonces, caller-header replacement, all hydration scripts, framing policy, no-store, and script asset delivery passed.');
+if (documentOnly) console.log('Asset security headers excluded explicitly: the Sites asset service does not apply public/_headers.');
