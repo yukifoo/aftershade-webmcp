@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 
+// CSP nonces are unique per response and cannot be prerendered or shared.
+export const dynamic = 'force-dynamic';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
